@@ -1,0 +1,64 @@
+function updateF(){
+     git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+     mkdir -p $HOME/Firmware_Backup
+     sudo cp -r /lib/firmware/* $HOME/Firmware_Backup/
+     sudo rm -R /lib/firmware/*
+     sudo cp -r $HOME/linux-firmware/* /lib/firmware/
+     rm -R -f $HOME/linux-firmware
+     sudo update-initramfs -u
+     echo "Do you want to reboot? (Y/n)" && read input
+     case $input in
+          Y|y) sudo reboot
+          ;;
+          N|n) exit
+          ;;
+          *) sudo reboot
+     esac
+}
+function backupF(){
+     sudo cp -r $HOME/Firmware_Backup/* /lib/firmware/
+     rm -R $HOME/Firmware_Backup
+     echo "Do you want to reboot? (Y/n)" && read input
+     case $input in
+          Y|y) sudo reboot
+          ;;
+          N|n) exit
+          ;;
+          *) sudo reboot
+     esac
+}
+function helpF(){
+     echo "
+  [INFORMATION]
+  
+    This script updates your firmware, based in GIT parameters.
+    
+  [USAGE]
+    
+    -h: prints this option
+    -v: prints the version of the script
+    -U: updates the firmware and creates a backup for a old one
+    -B: backups the firmware
+    
+  [CAUTION]
+    
+    Don't use (-U) and (-B) flags in the same line!
+     "
+}
+function versionF(){
+     echo "  updatefirm 1.0 - KanuX-14 | 05/07/2020 ~ 5:16 PM"
+}
+while getopts ":hvUB" opt; do
+     case $opt in
+          h) helpF
+          ;;
+          v) versionF
+          ;;
+          U) updateF
+          ;;
+          B) backupF
+          ;;
+          *) echo "This option don't stand up here!"
+          ;;
+     esac
+done
