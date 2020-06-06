@@ -1,11 +1,8 @@
+wait="sleep 0.7"
 function updateF(){
      git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
      mkdir -p $HOME/Firmware_Backup
-     sudo cp -r /lib/firmware/* $HOME/Firmware_Backup/
-     sudo rm -R /lib/firmware/*
-     sudo cp -r $HOME/linux-firmware/* /lib/firmware/
-     rm -R -f $HOME/linux-firmware
-     sudo update-initramfs -u
+     sudo cp -r /lib/firmware/* $HOME/Firmware_Backup/ && $wait &&  sudo rm -R /lib/firmware/* && $wait && sudo cp -r $HOME/linux-firmware/* /lib/firmware/ && $wait && rm -R -f $HOME/linux-firmware && sudo update-initramfs -u
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -16,8 +13,7 @@ function updateF(){
      esac
 }
 function backupF(){
-     sudo cp -r $HOME/Firmware_Backup/* /lib/firmware/
-     rm -R $HOME/Firmware_Backup
+     sudo cp -r $HOME/Firmware_Backup/* /lib/firmware/ && $wait && rm -R $HOME/Firmware_Backup
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -46,7 +42,7 @@ function helpF(){
      "
 }
 function versionF(){
-     echo "  updatefirm 1.0 - KanuX-14 | 05/07/2020 ~ 5:16 PM"
+     echo "  updatefirm 1.1 - KanuX-14 | 06/06/2020 ~ 1:51 AM"
 }
 while getopts ":hvUB" opt; do
      case $opt in
