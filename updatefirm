@@ -1,10 +1,21 @@
 #!/bin/bash
 
-wait="sleep 0.7"
+##### VARIABLES #####
+
+wait="sleep 0.4"
+main_folder="$HOME/.kxprograms/updatefirm"
+backup_main_folder="$HOME/.kxprograms/updatefirm/Firmware_Backup"
+new_firmware_folder="$HOME/.kxprograms/updatefirm/linux-firmware"
+old_firmware_folder="/lib/firmware"
+
+##### FUNCTIONS #####
+
 function updateF(){
      git clone https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-     mkdir -p $HOME/Firmware_Backup
-     sudo cp -r /lib/firmware/* $HOME/Firmware_Backup/ && $wait &&  sudo rm -R /lib/firmware/* && $wait && sudo cp -r $HOME/linux-firmware/* /lib/firmware/ && $wait && rm -R -f $HOME/linux-firmware && sudo update-initramfs -u
+     mkdir -p $main_folder
+     mkdir -p $backup_main_folder
+     mv linux-firmware $new_firmware_folder
+     sudo cp -r $old_firmware_folder/* $backup_main_folder/ && $wait && sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $new_firmware_folder/* $old_firmware_folder/ && $wait && sudo rm -R -f $new_firmware_folder && sudo update-initramfs -u
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -15,7 +26,7 @@ function updateF(){
      esac
 }
 function backupF(){
-     sudo cp -r $HOME/Firmware_Backup/* /lib/firmware/ && $wait && rm -R $HOME/Firmware_Backup
+     sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $backup_main_folder/* $old_firmware_folder/ && $wait && sudo rm -R $backup_main_folder
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -44,7 +55,7 @@ function helpF(){
      "
 }
 function versionF(){
-     echo "  updatefirm 1.1 - KanuX-14 | 06/06/2020 ~ 1:51 AM"
+     echo "  updatefirm 1.2 - KanuX-14 | 07/07/2020 ~ 6:32 PM"
 }
 while getopts ":hvUB" opt; do
      case $opt in
