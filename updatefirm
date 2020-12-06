@@ -15,7 +15,7 @@ function updateF(){
      mkdir -p $main_folder
      mkdir -p $backup_main_folder
      mv linux-firmware $new_firmware_folder
-     sudo cp -r $old_firmware_folder/* $backup_main_folder/ && $wait && sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $new_firmware_folder/* $old_firmware_folder/ && $wait && sudo rm -R -f $new_firmware_folder && sudo update-initramfs -u
+     sudo cp -r $old_firmware_folder/* $backup_main_folder/ && $wait && sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $new_firmware_folder/* $old_firmware_folder/ && $wait && sudo rm -R -f $new_firmware_folder && sudo update-initramfs -u -k all
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -26,7 +26,7 @@ function updateF(){
      esac
 }
 function backupF(){
-     sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $backup_main_folder/* $old_firmware_folder/ && $wait && sudo rm -R $backup_main_folder
+     sudo rm -R $old_firmware_folder/* && $wait && sudo cp -r $backup_main_folder/* $old_firmware_folder/ && $wait && sudo rm -R $backup_main_folder && sudo update-initramfs -u -k all
      echo "Do you want to reboot? (Y/n)" && read input
      case $input in
           Y|y) sudo reboot
@@ -55,7 +55,7 @@ function helpF(){
      "
 }
 function versionF(){
-     echo "  updatefirm 1.2 - KanuX-14 | 07/07/2020 ~ 6:32 PM"
+     echo "  updatefirm 1.3 - KanuX-14 | 12/06/2020 ~ 7:01 AM"
 }
 while getopts ":hvUB" opt; do
      case $opt in
